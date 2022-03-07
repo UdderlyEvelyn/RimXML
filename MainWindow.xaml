@@ -1,0 +1,26 @@
+﻿<Window x:Class="RimXML.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:local="clr-namespace:RimXML"
+        mc:Ignorable="d"
+        Title="RimXML" Height="450" Width="800">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Name="BtnNew" Header="_New"/>
+                <MenuItem Name="BtnOpen" Header="_Open"/>
+                <MenuItem Name="BtnSave" Header="_Save"/>
+                <MenuItem Name="BtnSaveAs" Header="S_ave As.."/>
+            </MenuItem>
+            <MenuItem Header="_Options">
+                <MenuItem Name="BtnLocateRimworld" Header="_Locate Rimworld" Click="BtnLocateRimworld_Click"/>
+                <MenuItem Name="BtnPreferences" Header="_Preferences"/>
+            </MenuItem>
+            <MenuItem Name="MenuItemDefTypes" Header="Def Types"/>
+        </Menu>
+        <ae:TextEditor Name="Editor" SyntaxHighlighting="XML" ShowLineNumbers="True"/>
+    </DockPanel>
+</Window>
