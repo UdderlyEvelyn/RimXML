@@ -95,8 +95,8 @@ namespace RimXML
                     var defaultValue = field.GetCustomAttribute(defaultValueAttribute);
                     if (defaultValue != null)
                         line += defaultValueAttribute.GetField("value").GetValue(defaultValue) ?? "";
-                    else if (field.FieldType != typeof(string))
-                        line += Activator.CreateInstance(field.FieldType)?.ToString();
+                    //else if (field.FieldType != typeof(string))
+                    //    line += Activator.CreateInstance(field.FieldType)?.ToString();
                     line += "</" + field.Name + ">";
                     sb.AppendLine(line);
                 }
