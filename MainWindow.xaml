@@ -21,6 +21,6 @@
             </MenuItem>
             <MenuItem Name="MenuItemDefTypes" Header="Def Types"/>
         </Menu>
-        <ae:TextEditor Name="Editor" SyntaxHighlighting="XML" ShowLineNumbers="True" PreviewKeyDown="Editor_TextInput" />
+        <ae:TextEditor Name="Editor" SyntaxHighlighting="XML" ShowLineNumbers="True" PreviewTextInput="Editor_TextInput" />
     </DockPanel>
 </Window>

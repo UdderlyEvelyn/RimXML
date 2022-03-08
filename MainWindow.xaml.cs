@@ -89,7 +89,7 @@ namespace RimXML
 
         private string GenerateDefTemplate(Type type)
         {
-            completionWindow = new CompletionWindow(Editor.TextArea);
+            completionData.Clear();
             unsavedAttribute = rimworldAssembly.GetType("Verse.UnsavedAttribute");
             defaultValueAttribute = rimworldAssembly.GetType("Verse.DefaultValueAttribute");
             StringBuilder sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf - 8\" ?>\n<Defs>\n\t<" + type.Name + ">\n");
@@ -112,11 +112,6 @@ namespace RimXML
             }
             sb.Append("\t</" + type.Name + ">\n</Defs>");
             return sb.ToString();
-        }
-
-        private void Editor_TextInput(object sender, TextCompositionEventArgs e)
-        {
-            MessageBox.Show("Sanity Check!");
         }
 
         public class CompletionData : ICompletionData
@@ -145,14 +140,9 @@ namespace RimXML
             }
         }
 
-        private void Editor_TextInput(object sender, EventArgs e)
+        private void Editor_TextInput(object sender, TextCompositionEventArgs e)
         {
-
-        }
-
-        private void Editor_TextInput(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.OemComma && (Keyboard.GetKeyStates(Key.LeftShift) == KeyStates.Down || Keyboard.GetKeyStates(Key.RightShift) == KeyStates.Down))
+            if (e.Text == "<")
             {
                 completionWindow = new CompletionWindow(Editor.TextArea);
                 foreach (var cd in completionData)
