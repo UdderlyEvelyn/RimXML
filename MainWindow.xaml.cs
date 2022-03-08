@@ -15,6 +15,9 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.IO;
 using System.Reflection;
+using ICSharpCode.AvalonEdit.CodeCompletion;
+using ICSharpCode.AvalonEdit.Editing;
+using ICSharpCode.AvalonEdit.Document;
 
 namespace RimXML
 {
@@ -29,10 +32,14 @@ namespace RimXML
         Type defType;
         Type unsavedAttribute;
         Type defaultValueAttribute;
+        List<CompletionData> completionData = new();
+
+        CompletionWindow completionWindow;
 
         public MainWindow()
         {
             InitializeComponent();
+            completionWindow = new CompletionWindow(Editor.TextArea);
             if (File.Exists(rimworldAssemblyPath + rimworldAssemblyName))
                 LoadAssembly(rimworldAssemblyPath + rimworldAssemblyName);
         }
@@ -82,6 +89,7 @@ namespace RimXML
 
         private string GenerateDefTemplate(Type type)
         {
+            completionWindow = new CompletionWindow(Editor.TextArea);
             unsavedAttribute = rimworldAssembly.GetType("Verse.UnsavedAttribute");
             defaultValueAttribute = rimworldAssembly.GetType("Verse.DefaultValueAttribute");
             StringBuilder sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf - 8\" ?>\n<Defs>\n\t<" + type.Name + ">\n");
@@ -98,11 +106,59 @@ namespace RimXML
                     //else if (field.FieldType != typeof(string))
                     //    line += Activator.CreateInstance(field.FieldType)?.ToString();
                     line += "</" + field.Name + ">";
-                    sb.AppendLine(line);
+                    completionData.Add(new CompletionData(field.Name, line));
+                    //sb.AppendLine(line);
                 }
             }
             sb.Append("\t</" + type.Name + ">\n</Defs>");
             return sb.ToString();
+        }
+
+        private void Editor_TextInput(object sender, TextCompositionEventArgs e)
+        {
+            MessageBox.Show("Sanity Check!");
+        }
+
+        public class CompletionData : ICompletionData
+        {
+            public CompletionData(string text, string content)
+            {
+                Text = text;
+                Content = content;
+                //Image = new BitmapImage(new Uri("DesignatorPlaceSoil.png", UriKind.Relative)); //This is just random PNG, didn't help.
+                Description = content;
+            }
+
+            public ImageSource Image { get; set; }
+
+            public string Text { get; set; }
+
+            public object Content { get; set; }
+
+            public object Description { get; set; }
+
+            public double Priority { get; set; }
+
+            public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs)
+            {
+                textArea.Document.Replace(completionSegment, (string)Content);
+            }
+        }
+
+        private void Editor_TextInput(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Editor_TextInput(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.OemComma && (Keyboard.GetKeyStates(Key.LeftShift) == KeyStates.Down || Keyboard.GetKeyStates(Key.RightShift) == KeyStates.Down))
+            {
+                completionWindow = new CompletionWindow(Editor.TextArea);
+                foreach (var cd in completionData)
+                    completionWindow.CompletionList.CompletionData.Add(cd);
+                completionWindow.Show();
+            }
         }
     }
 }
