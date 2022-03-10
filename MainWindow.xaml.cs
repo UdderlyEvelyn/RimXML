@@ -106,7 +106,7 @@ namespace RimXML
                     //else if (field.FieldType != typeof(string))
                     //    line += Activator.CreateInstance(field.FieldType)?.ToString();
                     line += "</" + field.Name + ">";
-                    completionData.Add(new CompletionData(field.Name, line));
+                    completionData.Add(new CompletionData("<" + field.Name + ">", field.Name));
                     //sb.AppendLine(line);
                 }
             }
@@ -121,7 +121,7 @@ namespace RimXML
                 Text = text;
                 Content = content;
                 //Image = new BitmapImage(new Uri("DesignatorPlaceSoil.png", UriKind.Relative)); //This is just random PNG, didn't help.
-                Description = content;
+                //Description = content;
             }
 
             public ImageSource Image { get; set; }
@@ -136,7 +136,7 @@ namespace RimXML
 
             public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs)
             {
-                textArea.Document.Replace(completionSegment, (string)Content);
+                textArea.Document.Replace(completionSegment, Text);
             }
         }
 
